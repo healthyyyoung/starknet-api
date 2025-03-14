@@ -8,9 +8,9 @@ pub mod core;
 pub mod crypto;
 pub mod data_availability;
 pub mod deprecated_contract_class;
-pub mod external_transaction;
 pub mod hash;
 pub mod internal_transaction;
+pub mod rpc_transaction;
 pub mod serde_utils;
 pub mod state;
 pub mod transaction;
@@ -22,7 +22,8 @@ use std::num::ParseIntError;
 use serde_utils::InnerDeserializationError;
 
 /// The error type returned by StarknetApi.
-#[derive(thiserror::Error, Clone, Debug)]
+// Note: if you need `Eq` see InnerDeserializationError's docstring.
+#[derive(thiserror::Error, Clone, Debug, PartialEq)]
 pub enum StarknetApiError {
     /// Error in the inner deserialization of the node.
     #[error(transparent)]

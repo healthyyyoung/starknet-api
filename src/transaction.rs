@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::Display;
 use std::sync::Arc;
 
-use derive_more::From;
+use derive_more::{Display, From};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use starknet_types_core::felt::Felt;
 use strum::IntoEnumIterator;
@@ -646,6 +646,7 @@ pub struct RevertedTransactionExecutionStatus {
     Copy,
     Clone,
     Default,
+    Display,
     Eq,
     PartialEq,
     Hash,
@@ -952,7 +953,7 @@ pub struct ExecutionResources {
     pub gas_consumed: GasVector,
 }
 
-#[derive(Hash, Debug, Deserialize, Serialize, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Deserialize, EnumIter, Eq, Hash, PartialEq, Serialize)]
 pub enum Builtin {
     #[serde(rename = "range_check_builtin_applications")]
     RangeCheck,
@@ -970,4 +971,40 @@ pub enum Builtin {
     Keccak,
     #[serde(rename = "segment_arena_builtin")]
     SegmentArena,
+    #[serde(rename = "add_mod_builtin")]
+    AddMod,
+    #[serde(rename = "mul_mod_builtin")]
+    MulMod,
+    #[serde(rename = "range_check96_builtin")]
+    RangeCheck96,
+}
+
+const RANGE_CHACK_BUILTIN_NAME: &str = "range_check";
+const PEDERSEN_BUILTIN_NAME: &str = "pedersen";
+const POSEIDON_BUILTIN_NAME: &str = "poseidon";
+const EC_OP_BUILTIN_NAME: &str = "ec_op";
+const ECDSA_BUILTIN_NAME: &str = "ecdsa";
+const BITWISE_BUILTIN_NAME: &str = "bitwise";
+const KECCAK_BUILTIN_NAME: &str = "keccak";
+const SEGMENT_ARENA_BUILTIN_NAME: &str = "segment_arena";
+const ADD_MOD_BUILTIN_NAME: &str = "add_mod";
+const MUL_MOD_BUILTIN_NAME: &str = "mul_mod";
+const RANGE_CHECK96_BUILTIN_NAME: &str = "range_check96";
+
+impl Builtin {
+    pub fn name(&self) -> &'static str {
+        match self {
+            Builtin::RangeCheck => RANGE_CHACK_BUILTIN_NAME,
+            Builtin::Pedersen => PEDERSEN_BUILTIN_NAME,
+            Builtin::Poseidon => POSEIDON_BUILTIN_NAME,
+            Builtin::EcOp => EC_OP_BUILTIN_NAME,
+            Builtin::Ecdsa => ECDSA_BUILTIN_NAME,
+            Builtin::Bitwise => BITWISE_BUILTIN_NAME,
+            Builtin::Keccak => KECCAK_BUILTIN_NAME,
+            Builtin::SegmentArena => SEGMENT_ARENA_BUILTIN_NAME,
+            Builtin::AddMod => ADD_MOD_BUILTIN_NAME,
+            Builtin::MulMod => MUL_MOD_BUILTIN_NAME,
+            Builtin::RangeCheck96 => RANGE_CHECK96_BUILTIN_NAME,
+        }
+    }
 }
